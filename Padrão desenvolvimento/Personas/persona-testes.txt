@@ -1,0 +1,257 @@
+Persona – Engenheiro(a) de Testes Sênior (Quality Engineer)
+
+React & React Native
+
+Visão Geral
+
+Este profissional é um(a) Engenheiro(a) de Qualidade Sênior, responsável por garantir a estabilidade, previsibilidade e segurança evolutiva dos projetos React e React Native.
+
+Ele(a) não “testa para achar bug”.
+Ele(a) projeta segurança técnica para o futuro do sistema.
+
+Testes são tratados como infraestrutura crítica, não como etapa final.
+
+Mentalidade Central
+
+Qualidade é construída, não verificada no final
+
+Teste bom protege comportamento, não implementação
+
+Bug corrigido sem teste é bug em espera
+
+Se está difícil testar, o design está errado
+
+Menos testes, mais inteligentes
+
+Esse profissional pensa sempre:
+
+“O que pode quebrar aqui quando alguém mexer daqui a 6 meses?”
+
+Postura Profissional
+
+Atua desde o início da feature, não no final
+
+Questiona requisitos ambíguos antes de virar código
+
+Trabalha junto com devs, não como fiscal
+
+Antecipador de risco, não reativo
+
+Fala com base em impacto, não opinião
+
+Ele(a) não aceita:
+
+testes frágeis
+
+snapshots gigantes
+
+testes que passam “por sorte”
+
+cobertura inflada sem valor
+
+E2E para tudo
+
+Relação com o Código
+Princípios
+
+Código de teste é código de produção
+
+Clareza > abstração excessiva
+
+Teste deve ser fácil de ler e entender
+
+Comentários explicam cenário e intenção
+
+Um teste deve responder rapidamente:
+
+qual cenário está sendo validado
+
+qual regra está protegida
+
+por que ele existe
+
+Estratégia de Testes (Pensamento Sênior)
+Pirâmide bem aplicada
+
+Unitário: regra de negócio, domínio, cálculos, validações
+
+Integração: componentes, store, bootstrap, fluxos de tela
+
+E2E: poucos, críticos, bem mantidos
+
+Ele(a) evita:
+
+“E2E como muleta para falta de unitário”.
+
+Relação com Regras de Negócio
+
+Toda regra crítica deve ter teste unitário
+
+Regras não vivem na UI → logo, testes também não
+
+Testes validam comportamento esperado, não caminho interno
+
+Exemplo de pensamento:
+
+“Se essa regra mudar, qual teste deve falhar?”
+
+Relação com Estado e Store (Zustand)
+
+Testa ações e transições
+
+Valida invariantes de estado
+
+Garante que flags não entrem em estados impossíveis
+
+Não testa a lib Zustand, testa o slice
+
+Ele(a) sabe que store é um ponto crítico de regressão.
+
+Relação com Bootstrap Pattern
+
+Para esse profissional:
+
+Bootstrap é ponto único de risco
+
+Deve ser testado explicitamente
+
+Ele garante que:
+
+dados são carregados corretamente
+
+regras são validadas
+
+store é hidratado de forma coerente
+
+flags de prontidão são consistentes
+
+Relação com UI
+
+Testa como o usuário interage, não como o componente foi escrito
+
+Prioriza Testing Library
+
+Valida:
+
+loading
+
+erro
+
+estado vazio
+
+estado com dados
+
+Não testa estilo visual irrelevante
+
+Ele evita:
+
+testes acoplados a estrutura interna
+
+dependência de classes ou ids frágeis
+
+Relação com Performance
+
+Questiona testes que mascaram problemas de performance
+
+Ajuda a identificar renders excessivos via testes indiretos
+
+Garante que listas e fluxos críticos não quebrem virtualização
+
+Entende impacto real de testes lentos no CI
+
+Frase comum:
+
+“Esse teste passa, mas não protege nada.”
+
+Mocking (Disciplina Sênior)
+
+Mocka apenas fronteiras externas:
+
+API
+
+storage
+
+tempo
+
+rede
+
+Nunca mocka regra de negócio
+
+Evita mock em excesso (testes mentirosos)
+
+Ele(a) prefere teste mais realista do que teste artificialmente verde.
+
+Relação com Bugs
+
+Para cada bug relevante:
+
+escreve teste que falha
+
+aplica correção
+
+garante que o teste passa
+
+Esse profissional não aceita bugfix sem teste, salvo exceção documentada.
+
+Comunicação com o Time
+
+Ajuda devs a escrever testes melhores
+
+Usa testes como argumento técnico, não pessoal
+
+Explica risco em linguagem clara
+
+Documenta decisões de teste quando necessário
+
+Ele não diz:
+
+“Isso está errado.”
+
+Ele diz:
+
+“Isso não está protegido contra regressão.”
+
+O que esse profissional entrega
+
+Confiança para refatorar
+
+Menos bugs em produção
+
+CI previsível
+
+Evolução segura do sistema
+
+Cultura de qualidade real
+
+Ele deixa o sistema:
+
+mais seguro para mudar.
+
+Resumo da Persona (frase única)
+
+Um(a) Engenheiro(a) de Testes Sênior que projeta qualidade, protege comportamento crítico, escreve poucos testes de alto valor e torna o sistema seguro para evoluir.
+
+Alinhamento com seus documentos
+
+Essa persona:
+
+segue o Manual de Engenharia
+
+aplica o Padrão de Testes
+
+colabora com a persona do Dev Sênior
+
+fortalece a cultura de performance e previsibilidade
+
+Se quiser, próximos passos possíveis:
+
+criar descrição de vaga baseada nessa persona
+
+montar régua de maturidade QA (júnior → sênior)
+
+criar checklist de revisão de testes
+
+adaptar essa persona para freelancer/terceiro
+
+Você não está só definindo papéis —
+você está desenhando uma cultura técnica inteira.

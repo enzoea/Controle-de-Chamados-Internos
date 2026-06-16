@@ -1,0 +1,804 @@
+# Sistema de Controle de Chamados Internos
+
+## Documento de Arquitetura e Especificação Funcional
+
+Versão: 1.0
+
+Autor: Enzo Martins
+
+---
+
+# 1. Objetivo
+
+O Sistema de Controle de Chamados Internos tem como objetivo centralizar o registro, acompanhamento e distribuição de solicitações internas realizadas pelos colaboradores de uma empresa.
+
+A solução visa substituir controles informais realizados por e-mail, WhatsApp, planilhas ou anotações manuais, proporcionando rastreabilidade, organização e melhor distribuição de trabalho entre os responsáveis pelo atendimento.
+
+---
+
+# 2. Objetivos Técnicos
+
+Durante o desenvolvimento serão priorizados:
+
+* Simplicidade de manutenção;
+* Baixo acoplamento;
+* Alta coesão;
+* Reutilização de código;
+* Testabilidade;
+* Organização arquitetural;
+* Produtividade para equipes pequenas.
+
+---
+
+# 3. Stack Tecnológica
+
+## Backend
+
+* PHP 8.3
+* Laravel 12
+* Eloquent ORM
+* Laravel Breeze
+
+## Frontend
+
+* Blade
+* TailwindCSS
+* Alpine.js
+
+## Banco de Dados
+
+### Desenvolvimento
+
+* SQLite
+
+### Produção
+
+* MySQL
+
+## Testes
+
+* PHPUnit
+
+## Ferramentas
+
+* Composer
+* NPM
+* Vite
+* Git
+* GitHub
+
+---
+
+# 4. Justificativa Tecnológica
+
+A escolha do Laravel permite construir uma aplicação completa utilizando uma única base de código.
+
+O uso de Blade reduz a complexidade da aplicação, eliminando a necessidade de manter um frontend desacoplado para um sistema predominantemente CRUD.
+
+TailwindCSS foi escolhido para acelerar o desenvolvimento da interface e garantir consistência visual.
+
+SQLite foi adotado para facilitar a execução local por qualquer avaliador sem necessidade de configuração adicional.
+
+---
+
+# 5. Arquitetura da Solução
+
+## Arquitetura Monolítica Modular
+
+O sistema será desenvolvido utilizando uma arquitetura monolítica organizada por responsabilidades.
+
+Fluxo principal:
+
+```text
+View
+ ↓
+Controller
+ ↓
+Form Request
+ ↓
+Service
+ ↓
+Model
+ ↓
+Database
+```
+
+Essa abordagem reduz a complexidade operacional e facilita a manutenção por equipes pequenas.
+
+---
+
+# 6. Estrutura de Diretórios
+
+```text
+app
+├── Enums
+├── Http
+│   ├── Controllers
+│   ├── Requests
+│   └── Middleware
+│
+├── Models
+│
+├── Policies
+│
+├── Services
+│
+└── Providers
+
+database
+├── factories
+├── migrations
+└── seeders
+
+resources
+├── css
+├── js
+└── views
+    ├── auth
+    ├── layouts
+    ├── components
+    ├── dashboard
+    └── tickets
+
+routes
+├── web.php
+└── auth.php
+
+tests
+├── Feature
+└── Unit
+```
+
+---
+
+# 7. Padrões de Projeto Utilizados
+
+## Service Layer Pattern
+
+Objetivo:
+
+Isolar regras de negócio dos Controllers.
+
+Exemplo:
+
+```text
+TicketAssignmentService
+```
+
+Responsável pela distribuição automática de chamados.
+
+---
+
+## Dependency Injection
+
+Todas as dependências serão injetadas pelo Container do Laravel.
+
+Exemplo:
+
+```php
+public function __construct(
+    private TicketAssignmentService $service
+) {}
+```
+
+---
+
+## Policy Pattern
+
+Responsável pelo controle de permissões.
+
+Exemplo:
+
+```text
+TicketPolicy
+```
+
+---
+
+## Factory Pattern
+
+Utilizado para geração de dados de testes.
+
+Exemplo:
+
+```text
+TicketFactory
+UserFactory
+```
+
+---
+
+## Blade Components
+
+Utilizado para reutilização da interface.
+
+Exemplos:
+
+```text
+<x-button />
+<x-input />
+<x-card />
+<x-status-badge />
+<x-priority-badge />
+```
+
+---
+
+## Enum Pattern
+
+Evita uso de strings mágicas.
+
+Exemplos:
+
+```php
+TicketStatus
+TicketPriority
+```
+
+---
+
+# 8. Princípios de Desenvolvimento
+
+## SOLID
+
+### Single Responsibility Principle
+
+Cada classe terá apenas uma responsabilidade.
+
+Exemplo:
+
+```text
+TicketController
+↓
+Controla requisições
+
+TicketAssignmentService
+↓
+Realiza distribuição automática
+```
+
+---
+
+### Open Closed Principle
+
+Enums e Services permitirão expansão sem alterações significativas.
+
+---
+
+### Liskov Substitution Principle
+
+Respeitado através das abstrações nativas do framework.
+
+---
+
+### Interface Segregation Principle
+
+Aplicado conforme necessidade futura.
+
+---
+
+### Dependency Inversion Principle
+
+Dependências serão resolvidas pelo container do Laravel.
+
+---
+
+## DRY
+
+Toda lógica reutilizável será extraída para:
+
+* Services
+* Components
+* Helpers
+* Scopes
+
+---
+
+## KISS
+
+A solução prioriza simplicidade.
+
+Não serão implementadas funcionalidades desnecessárias ao escopo.
+
+---
+
+# 9. Entidades do Sistema
+
+## Usuário
+
+Representa qualquer colaborador autenticado.
+
+Campos:
+
+```text
+id
+name
+email
+password
+created_at
+updated_at
+```
+
+---
+
+## Chamado
+
+Representa uma solicitação interna.
+
+Campos:
+
+```text
+id
+title
+description
+priority
+status
+requester_id
+responsible_id
+opened_at
+created_at
+updated_at
+```
+
+---
+
+# 10. Relacionamentos
+
+## User
+
+```text
+1 usuário
+↓
+N chamados solicitados
+```
+
+```text
+1 usuário
+↓
+N chamados atribuídos
+```
+
+---
+
+## Ticket
+
+```text
+1 chamado
+↓
+1 solicitante
+```
+
+```text
+1 chamado
+↓
+1 responsável
+```
+
+---
+
+# 11. Regras de Negócio
+
+## RN01
+
+Todo chamado deve possuir:
+
+* Título
+* Descrição
+* Prioridade
+* Responsável
+
+---
+
+## RN02
+
+O sistema deverá registrar automaticamente:
+
+```text
+Data de abertura
+```
+
+---
+
+## RN03
+
+Chamados podem ser atribuídos:
+
+* Manualmente
+* Automaticamente
+
+---
+
+## RN04
+
+A distribuição automática deve selecionar o responsável com menor quantidade de chamados em aberto.
+
+---
+
+## RN05
+
+São considerados chamados em aberto:
+
+```text
+ABERTO
+EM_ANDAMENTO
+```
+
+---
+
+## RN06
+
+São considerados chamados concluídos:
+
+```text
+RESOLVIDO
+FECHADO
+```
+
+---
+
+## RN07
+
+Em caso de empate na distribuição automática:
+
+Selecionar o responsável com menor ID.
+
+---
+
+# 12. Casos de Uso
+
+## UC01 – Realizar Login
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Informa e-mail
+2. Informa senha
+3. Sistema valida credenciais
+4. Usuário acessa dashboard
+
+### Resultado
+
+Usuário autenticado.
+
+---
+
+## UC02 – Abrir Chamado
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Acessa tela de novo chamado
+2. Preenche dados
+3. Seleciona responsável ou distribuição automática
+4. Salva
+
+### Resultado
+
+Chamado criado.
+
+---
+
+## UC03 – Distribuição Automática
+
+### Ator
+
+Sistema
+
+### Fluxo Principal
+
+1. Usuário escolhe atribuição automática
+2. Sistema contabiliza chamados abertos
+3. Identifica responsável menos carregado
+4. Atribui chamado
+
+### Resultado
+
+Chamado distribuído automaticamente.
+
+---
+
+## UC04 – Editar Chamado
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Abre chamado
+2. Altera informações
+3. Salva
+
+### Resultado
+
+Chamado atualizado.
+
+---
+
+## UC05 – Alterar Status
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Acessa chamado
+2. Seleciona novo status
+3. Salva
+
+### Resultado
+
+Status atualizado.
+
+---
+
+## UC06 – Consultar Chamados
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Acessa listagem
+2. Visualiza chamados
+3. Aplica filtros
+
+### Resultado
+
+Lista filtrada.
+
+---
+
+## UC07 – Visualizar Detalhes
+
+### Ator
+
+Usuário
+
+### Fluxo Principal
+
+1. Seleciona chamado
+2. Visualiza informações completas
+
+### Resultado
+
+Detalhamento exibido.
+
+---
+
+# 13. Funcionalidades
+
+## Dashboard
+
+Indicadores:
+
+* Total de chamados
+* Chamados abertos
+* Em andamento
+* Resolvidos
+* Fechados
+
+---
+
+## Autenticação
+
+* Login
+* Logout
+* Proteção de rotas
+
+---
+
+## Chamados
+
+* Criar
+* Editar
+* Visualizar
+* Listar
+
+---
+
+## Filtros
+
+* Status
+* Prioridade
+* Responsável
+
+---
+
+## Distribuição Automática
+
+* Menor carga de trabalho
+* Critério de desempate
+
+---
+
+# 14. Componentes da Interface
+
+## Layout
+
+```text
+Navbar
+Sidebar
+Content
+Footer
+```
+
+---
+
+## Componentes Reutilizáveis
+
+```text
+x-button
+x-input
+x-select
+x-textarea
+x-card
+x-alert
+x-modal
+x-table
+x-status-badge
+x-priority-badge
+```
+
+---
+
+# 15. Estratégia de Testes
+
+## Testes Feature
+
+### Autenticação
+
+* Login válido
+* Login inválido
+* Logout
+
+### Chamados
+
+* Criar chamado
+* Editar chamado
+* Listar chamado
+* Visualizar chamado
+
+### Distribuição Automática
+
+* Menor carga
+* Empate
+* Ignorar chamados concluídos
+
+---
+
+## Testes Unitários
+
+### TicketAssignmentService
+
+* Seleciona responsável correto
+* Considera apenas chamados abertos
+* Resolve empates
+
+---
+
+# 16. Seeders
+
+Serão criados automaticamente:
+
+## Usuários Responsáveis
+
+```text
+João Silva
+Maria Oliveira
+Carlos Souza
+```
+
+## Usuário Administrador
+
+```text
+admin@example.com
+password
+```
+
+---
+
+# 17. Requisitos Funcionais
+
+### RF01
+
+Autenticação de usuários.
+
+### RF02
+
+Cadastro de chamados.
+
+### RF03
+
+Edição de chamados.
+
+### RF04
+
+Visualização de chamados.
+
+### RF05
+
+Listagem de chamados.
+
+### RF06
+
+Distribuição automática.
+
+### RF07
+
+Acompanhamento por status.
+
+### RF08
+
+Filtros de pesquisa.
+
+### RF09
+
+Dashboard gerencial.
+
+---
+
+# 18. Requisitos Não Funcionais
+
+### RNF01
+
+Execução local simplificada.
+
+### RNF02
+
+Código organizado.
+
+### RNF03
+
+Baixo acoplamento.
+
+### RNF04
+
+Alta coesão.
+
+### RNF05
+
+Interface responsiva.
+
+### RNF06
+
+Cobertura de testes para regras críticas.
+
+### RNF07
+
+Documentação completa.
+
+---
+
+# 19. Funcionalidades Futuras
+
+* Comentários em chamados
+* Histórico de alterações
+* Upload de anexos
+* Notificações por e-mail
+* Relatórios
+* SLA
+* Dashboard avançado
+* Exportação CSV
+* Gestão de usuários
+
+---
+
+# 20. Critérios de Qualidade
+
+A aplicação será considerada pronta quando:
+
+* Todos os casos de uso principais estiverem implementados;
+* As regras de distribuição automática estiverem testadas;
+* O CRUD de chamados estiver funcional;
+* O sistema possuir autenticação;
+* A documentação estiver atualizada;
+* O projeto puder ser executado localmente apenas com os comandos descritos no README.

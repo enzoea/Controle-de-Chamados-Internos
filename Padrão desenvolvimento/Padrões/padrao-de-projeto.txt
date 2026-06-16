@@ -1,0 +1,540 @@
+# Manual Oficial de Engenharia de Software
+
+## Padrões de Desenvolvimento – Laravel
+
+---
+
+# 1. Propósito do Documento
+
+Este documento estabelece os padrões oficiais de engenharia de software para o Sistema de Controle de Chamados Internos e para futuros projetos desenvolvidos utilizando Laravel.
+
+Seu objetivo é garantir que a aplicação seja:
+
+* Fácil de manter
+* Fácil de evoluir
+* Fácil de testar
+* Fácil de compreender por novos membros da equipe
+
+Este documento deve ser seguido como padrão organizacional durante todo o ciclo de desenvolvimento.
+
+---
+
+# 2. Princípios Fundamentais
+
+## 2.1 Código é Produto
+
+Código é um ativo da empresa.
+
+Toda implementação deve ser pensada para ser mantida e evoluída ao longo do tempo.
+
+O código deve ser:
+
+* Legível
+* Coeso
+* Testável
+* Documentado
+* Previsível
+
+---
+
+## 2.2 Clareza Acima de Complexidade
+
+A solução mais simples que resolve corretamente o problema deve ser priorizada.
+
+Evitar abstrações prematuras.
+
+Evitar arquiteturas desnecessariamente complexas.
+
+---
+
+## 2.3 Performance é Requisito
+
+Toda funcionalidade deve considerar:
+
+* Quantidade de consultas ao banco
+* Uso correto dos relacionamentos
+* Carregamento otimizado de dados
+* Evitar processamento redundante
+
+N+1 Query é considerado problema de arquitetura.
+
+---
+
+# 3. Comentários e Documentação
+
+## 3.1 Regra Geral
+
+Comentários devem existir sempre que uma regra de negócio não for imediatamente evidente.
+
+Comentários devem explicar:
+
+* Motivo da implementação
+* Regra de negócio aplicada
+* Possíveis impactos futuros
+
+Comentários não devem:
+
+* Repetir o que o código já expressa
+* Explicar código trivial
+
+---
+
+## 3.2 PHPDoc
+
+Métodos públicos de Services devem possuir documentação.
+
+Exemplo:
+
+```php
+/**
+ * Retorna o responsável com menor quantidade
+ * de chamados ainda não concluídos.
+ */
+public function assignAutomatically(): User
+```
+
+---
+
+# 4. Arquitetura Oficial
+
+## 4.1 Arquitetura em Camadas
+
+Toda funcionalidade deverá seguir o fluxo:
+
+```text
+Request
+↓
+Controller
+↓
+Form Request
+↓
+Service
+↓
+Model
+↓
+Database
+```
+
+Cada camada possui responsabilidade específica.
+
+---
+
+## 4.2 Controllers
+
+Controllers devem ser enxutos.
+
+Responsabilidades permitidas:
+
+* Receber requisições
+* Chamar Services
+* Retornar Views
+* Redirecionar respostas
+
+Controllers não devem:
+
+* Conter regras de negócio
+* Conter consultas complexas
+* Conter validações manuais
+
+---
+
+## 4.3 Form Requests
+
+Toda validação deve ser centralizada em Form Requests.
+
+Exemplos:
+
+```text
+StoreTicketRequest
+UpdateTicketRequest
+```
+
+É proibido utilizar:
+
+```php
+$request->validate([...]);
+```
+
+diretamente nos Controllers.
+
+---
+
+## 4.4 Services
+
+Toda regra de negócio relevante deve estar em Services.
+
+Exemplo:
+
+```text
+TicketAssignmentService
+```
+
+Responsável por:
+
+* Distribuição automática
+* Regras de balanceamento
+* Critérios de desempate
+
+Services não devem depender de Views.
+
+---
+
+## 4.5 Models
+
+Models devem representar:
+
+* Entidades
+* Relacionamentos
+* Scopes
+* Acessors
+* Mutators
+
+Models não devem concentrar regras complexas de negócio.
+
+---
+
+# 5. Estrutura Oficial de Diretórios
+
+```text
+app
+├── Enums
+├── Http
+│   ├── Controllers
+│   ├── Requests
+│   └── Middleware
+│
+├── Models
+│
+├── Policies
+│
+├── Services
+│
+├── Providers
+│
+└── Traits
+
+database
+├── factories
+├── migrations
+└── seeders
+
+resources
+└── views
+    ├── auth
+    ├── layouts
+    ├── components
+    ├── dashboard
+    └── tickets
+
+routes
+├── web.php
+└── auth.php
+
+tests
+├── Feature
+└── Unit
+```
+
+---
+
+# 6. Padrões de Projeto Obrigatórios
+
+## 6.1 Service Layer Pattern
+
+Toda regra de negócio deve ser isolada em Services.
+
+Exemplo:
+
+```text
+TicketAssignmentService
+```
+
+---
+
+## 6.2 Dependency Injection
+
+Dependências devem ser resolvidas pelo Container do Laravel.
+
+Exemplo:
+
+```php
+public function __construct(
+    private TicketAssignmentService $service
+) {}
+```
+
+Instanciar classes manualmente é desencorajado.
+
+---
+
+## 6.3 Policy Pattern
+
+Controle de permissões deve utilizar Policies.
+
+Exemplo:
+
+```text
+TicketPolicy
+```
+
+---
+
+## 6.4 Factory Pattern
+
+Factories devem ser utilizadas para:
+
+* Testes
+* Seeders
+* Massa de dados
+
+---
+
+## 6.5 Enum Pattern
+
+Valores fixos devem utilizar Enums.
+
+Exemplos:
+
+```text
+TicketStatus
+TicketPriority
+```
+
+É proibido espalhar strings fixas pelo sistema.
+
+---
+
+# 7. SOLID
+
+## Single Responsibility Principle
+
+Cada classe deve possuir apenas uma responsabilidade.
+
+Exemplo:
+
+```text
+TicketController
+→ Fluxo HTTP
+
+TicketAssignmentService
+→ Distribuição automática
+```
+
+---
+
+## Open Closed Principle
+
+Novas funcionalidades devem ser adicionadas sem alterar regras existentes.
+
+---
+
+## Dependency Inversion Principle
+
+As classes devem depender de abstrações sempre que possível.
+
+---
+
+# 8. DRY
+
+Não repetir regras de negócio.
+
+Não duplicar consultas.
+
+Não duplicar componentes visuais.
+
+Toda lógica reutilizável deve ser extraída.
+
+---
+
+# 9. Interface do Usuário
+
+## 9.1 Tecnologias
+
+Frontend oficial:
+
+* Blade
+* TailwindCSS
+* Alpine.js
+
+---
+
+## 9.2 Componentização
+
+Todo elemento reutilizável deve ser transformado em Blade Component.
+
+Exemplos:
+
+```text
+<x-button />
+<x-input />
+<x-select />
+<x-card />
+<x-table />
+<x-status-badge />
+<x-priority-badge />
+```
+
+---
+
+## 9.3 Layout Base
+
+Todas as páginas devem utilizar o mesmo layout principal.
+
+Estrutura:
+
+```text
+Navbar
+Sidebar
+Área de Conteúdo
+Footer
+```
+
+---
+
+# 10. Banco de Dados
+
+## 10.1 Migrations
+
+Toda alteração estrutural deve ocorrer via Migration.
+
+Alterações manuais diretamente no banco não são permitidas.
+
+---
+
+## 10.2 Seeders
+
+O projeto deve possuir Seeders para:
+
+* Usuários de teste
+* Responsáveis padrão
+* Dados iniciais
+
+---
+
+## 10.3 Relacionamentos
+
+Utilizar relacionamentos Eloquent sempre que possível.
+
+Evitar consultas SQL desnecessárias.
+
+---
+
+# 11. Testes
+
+## 11.1 Regra Geral
+
+Toda regra crítica deve possuir cobertura de testes.
+
+---
+
+## 11.2 Testes Unitários
+
+Cobrir:
+
+```text
+TicketAssignmentService
+Enums
+Regras de distribuição
+```
+
+---
+
+## 11.3 Testes Feature
+
+Cobrir:
+
+```text
+Login
+Logout
+Cadastro de chamado
+Edição de chamado
+Visualização
+Listagem
+Distribuição automática
+```
+
+---
+
+# 12. Casos de Uso Obrigatórios
+
+## UC01 – Login
+
+Usuário acessa o sistema através de credenciais válidas.
+
+---
+
+## UC02 – Abrir Chamado
+
+Usuário registra um novo chamado.
+
+---
+
+## UC03 – Distribuição Automática
+
+Sistema seleciona automaticamente o responsável com menor carga de trabalho.
+
+---
+
+## UC04 – Editar Chamado
+
+Usuário atualiza informações do chamado.
+
+---
+
+## UC05 – Alterar Status
+
+Usuário altera o andamento da solicitação.
+
+---
+
+## UC06 – Consultar Chamados
+
+Usuário acompanha chamados existentes.
+
+---
+
+## UC07 – Visualizar Dashboard
+
+Usuário acompanha indicadores do sistema.
+
+---
+
+# 13. Checklist Obrigatório Antes do Commit
+
+Verificar:
+
+* [ ] Código documentado
+* [ ] Sem código morto
+* [ ] Sem consultas redundantes
+* [ ] Sem regras de negócio em Controllers
+* [ ] Validação em Form Requests
+* [ ] Componentes reutilizados
+* [ ] Testes executados
+* [ ] Sem warnings ou erros
+
+---
+
+# 14. Responsabilidade Técnica
+
+Todo desenvolvedor é responsável por:
+
+* Manter a qualidade do código
+* Seguir os padrões definidos
+* Garantir consistência arquitetural
+* Melhorar continuamente o sistema
+
+Desvios deste padrão devem possuir justificativa técnica documentada.
+
+---
+
+# 15. Encerramento
+
+Este documento representa o padrão oficial de desenvolvimento adotado para o projeto.
+
+Todas as decisões técnicas devem respeitar os princípios aqui definidos.
+
+O objetivo não é apenas entregar funcionalidades, mas construir uma base sólida, sustentável e preparada para evolução contínua.
+
+Código bom não é apenas o que funciona hoje.
+
+É o que continua funcionando, sendo compreendido e evoluído com segurança amanhã.

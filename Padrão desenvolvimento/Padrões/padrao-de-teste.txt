@@ -1,0 +1,653 @@
+Manual Oficial de Testes – React e React Native (Nível Sênior)
+1. Objetivo do Documento
+
+Este documento define o padrão oficial de testes para aplicações React e React Native da empresa.
+
+Ele estabelece como os testes devem ser pensados, escritos e mantidos, com foco em:
+
+confiabilidade
+
+previsibilidade
+
+proteção contra regressões
+
+suporte à refatoração segura
+
+Testes não existem para aumentar cobertura numérica. Eles existem para garantir comportamento correto ao longo do tempo.
+
+2. Princípios Fundamentais de Testes
+2.1 Teste Protege Comportamento, Não Implementação
+
+O teste deve validar:
+
+o que o sistema faz
+
+como o usuário percebe o comportamento
+
+O teste não deve depender de detalhes internos da implementação.
+
+Refatorar código sem quebrar teste é sinal de teste bem escrito.
+
+2.2 Teste é Contrato
+
+Cada teste representa um contrato de comportamento.
+
+Se o teste falhar, algo relevante foi quebrado.
+
+Testes frágeis (que quebram sem mudança de comportamento) são considerados débito técnico.
+
+2.3 Menos Testes, Testes Melhores
+
+Não buscamos quantidade. Buscamos testes que realmente protejam regras críticas.
+
+Um teste inútil custa tempo de manutenção.
+
+3. Pirâmide de Testes (Adotada pela Empresa)
+
+A empresa adota a seguinte estratégia:
+
+Testes Unitários – base
+
+Testes de Integração – essenciais
+
+Testes de Interface (UI) – poucos e críticos
+
+Quanto mais alto o nível, menor a quantidade e maior o custo.
+
+4. Testes Unitários
+4.1 O Que Deve Ser Testado
+
+Testes unitários devem cobrir:
+
+regras de negócio
+
+cálculos
+
+validações
+
+funções puras
+
+serviços de domínio
+
+Nunca focar em UI.
+
+4.2 Boas Práticas
+
+Uma unidade por teste
+
+Entrada clara, saída clara
+
+Sem dependência de tempo, rede ou persistência
+
+Mock apenas do necessário
+
+4.3 Estrutura Recomendada
+
+Arrange (preparação)
+
+Act (execução)
+
+Assert (verificação)
+
+Essa separação deve ser clara no código.
+
+5. Testes de Integração
+5.1 Objetivo
+
+Garantir que múltiplas unidades funcionem corretamente juntas.
+
+Exemplos:
+
+store + serviço
+
+bootstrap + persistência
+
+regras de negócio + estado
+
+5.2 O Que Testar
+
+fluxo de inicialização (bootstrap)
+
+hidratação de estado
+
+sincronização de dados
+
+comportamento do store diante de ações
+
+5.3 Boas Práticas
+
+Usar ambiente controlado
+
+Mockar apenas fronteiras externas
+
+Não mockar regra de negócio
+
+6. Testes de Interface (UI)
+6.1 Quando Testar UI
+
+Testes de UI devem ser usados apenas quando:
+
+fluxo é crítico
+
+regressão seria grave
+
+lógica não pode ser testada em níveis inferiores
+
+6.2 O Que Testar
+
+renderização condicional
+
+bloqueios de fluxo
+
+feedbacks visuais importantes
+
+Nunca testar:
+
+estilos detalhados
+
+estrutura interna de componentes
+
+6.3 React Native
+
+Em mobile:
+
+priorizar testes de comportamento
+
+evitar snapshots extensos
+
+testar o mínimo necessário
+
+7. Testes de Store (Zustand)
+7.1 O Que Testar
+
+estado inicial
+
+actions
+
+transições de estado
+
+flags derivadas
+
+Store deve ser testável sem UI.
+
+8. Testes de Bootstrap
+8.1 Obrigatoriedade
+
+Toda tela que utiliza Bootstrap Pattern deve possuir teste de bootstrap.
+
+8.2 O Que Validar
+
+dados carregados corretamente
+
+regras aplicadas
+
+estado final esperado
+
+Nunca testar implementação interna do bootstrap.
+
+9. Mocks, Stubs e Fakes
+9.1 Regra de Ouro
+
+Mock é exceção, não padrão.
+
+Mockar apenas:
+
+IO
+
+rede
+
+persistência
+
+APIs externas
+
+Nunca mockar regra de negócio.
+
+10. Testes e Performance
+
+Testes não devem:
+
+forçar re-renderizações desnecessárias
+
+depender de timers reais
+
+depender de delays artificiais
+
+Preferir controle explícito do fluxo.
+
+11. Nomenclatura de Testes
+
+Testes devem ser escritos como frases:
+
+Dado X, quando Y, então Z
+
+Isso torna o teste autoexplicativo.
+
+12. Organização de Pastas de Teste
+
+Estrutura sugerida:
+
+tests/unit
+
+tests/integration
+
+tests/ui
+
+Nunca misturar níveis diferentes no mesmo arquivo.
+
+13. Critérios de Qualidade
+
+Um teste é considerado bom quando:
+
+falha apenas quando comportamento quebra
+
+é fácil de entender
+
+não depende de ordem de execução
+
+pode ser executado isoladamente
+
+14. Testes em Pull Requests
+
+Todo PR deve:
+
+incluir testes para regras novas ou alteradas
+
+atualizar testes quebrados conscientemente
+
+nunca remover teste sem justificativa
+
+15. Responsabilidade Técnica
+
+Quem escreve código é responsável por:
+
+escrever testes
+
+manter testes saudáveis
+
+corrigir testes frágeis
+
+Testes não são tarefa secundária.
+
+16. Encerramento
+
+Testes são parte do produto.
+
+Código sem teste é código temporário.
+
+Este manual define o padrão oficial de testes da empresa.
+
+
+
+
+Manual Oficial – Padrão de Testes (React e React Native)
+1. Objetivo
+
+Este documento define o padrão corporativo de testes automatizados e validações para projetos React (web) e React Native (mobile).
+
+Os objetivos são:
+
+reduzir bugs regressivos
+
+aumentar previsibilidade de entrega
+
+proteger fluxos críticos (negócio, sync, cache, offline)
+
+facilitar refatorações com segurança
+
+Regra: feature sem teste em fluxo crítico é débito técnico com justificativa formal.
+
+2. Princípios de Teste (Nível Sênior)
+2.1 Testes devem ser determinísticos
+
+Um teste deve passar ou falhar sempre pelo mesmo motivo.
+
+Evitar dependência de:
+
+horário real
+
+rede
+
+serviços externos
+
+dados variáveis
+
+2.2 Testes devem validar comportamento, não implementação
+
+Foque no resultado esperado.
+
+Não teste detalhes internos que podem mudar sem quebrar a funcionalidade.
+
+2.3 Escreva o mínimo de teste que protege o máximo de valor
+
+Testes são investimento. Escreva o necessário para:
+
+prevenir regressão
+
+garantir regras de negócio
+
+validar fluxos críticos
+
+2.4 Comentários em testes são obrigatórios em fluxos complexos
+
+Principalmente em:
+
+sincronização
+
+offline-first
+
+regras de jornada
+
+validações condicionais
+
+Comentários devem explicar o cenário e o porquê do teste.
+
+3. Pirâmide de Testes (Padrão Empresa)
+
+A estratégia oficial segue a pirâmide:
+
+Unitários (maior volume)
+
+regras de negócio
+
+utilitários
+
+mapeamentos
+
+validadores
+
+reducers/stores
+
+Integração / Componentes (volume moderado)
+
+componentes com estado
+
+interação de UI
+
+fluxos de tela sem depender de backend real
+
+E2E (poucos e críticos)
+
+fluxos principais do usuário
+
+smoke tests
+
+cenários de assinatura / bloqueios / criação de atividade
+
+Quanto mais alto na pirâmide, mais caro (lento e frágil). Use com critério.
+
+4. O que deve ser testado (Obrigatório)
+4.1 Regras de negócio
+
+Toda regra de domínio deve ter teste unitário.
+
+Exemplos:
+
+bloqueio por assinatura pendente
+
+validações de jornada
+
+cálculo de duração
+
+regras de criação/edição/exclusão
+
+4.2 Fluxos críticos
+
+Fluxos críticos devem ser protegidos com integração e/ou E2E:
+
+login e autenticação
+
+sincronização (quando aplicável)
+
+criação de atividade
+
+assinatura do resumo diário
+
+bloqueios por pendência
+
+persistência offline (Realm/cache)
+
+4.3 Bugs corrigidos
+
+Toda correção de bug relevante deve incluir:
+
+teste que falha antes da correção
+
+teste que passa depois
+
+Regra prática: bug fix sem teste vira bug reintroduzido.
+
+5. O que NÃO deve ser testado
+
+detalhes internos de implementação (ex.: estado interno irrelevante)
+
+estilos e cores (exceto componentes críticos de acessibilidade)
+
+bibliotecas de terceiros
+
+snapshots gigantes e frágeis
+
+Snapshots só são aceitos quando:
+
+pequenos
+
+muito estáveis
+
+têm objetivo claro
+
+6. Padrão de Ferramentas
+6.1 Web (React)
+
+Jest como test runner
+
+React Testing Library para testes de componentes
+
+6.2 Mobile (React Native)
+
+Jest + React Native Testing Library
+
+Detox para E2E (quando aplicável)
+
+Sempre priorizar bibliotecas que testem comportamento do usuário (Testing Library).
+
+7. Estrutura e Organização dos Testes
+7.1 Onde os testes vivem
+
+Padrão recomendado:
+
+src/**/__tests__/ para testes de módulo
+
+ou *.spec.ts(x) ao lado do arquivo testado
+
+A regra é consistência dentro do projeto.
+
+7.2 Nomeação
+
+Padrão: nomeDoArquivo.spec.ts ou nomeDoArquivo.test.ts.
+
+Casos complexos:
+
+featureName.behavior.spec.ts
+
+8. Padrão de Escrita (AAA)
+
+Todo teste deve seguir Arrange → Act → Assert.
+
+Arrange: preparar cenário
+
+Act: executar ação
+
+Assert: validar resultado
+
+Evitar testes longos com muitas ações. Se o teste ficou grande, provavelmente precisa ser dividido.
+
+9. Mocking e Isolamento
+9.1 Mock apenas o necessário
+
+Mock em excesso cria testes que “passam mentindo”.
+
+9.2 Camadas recomendadas para mock
+
+rede / API
+
+storage
+
+serviços externos
+
+relógio
+
+9.3 O que evitar mockar
+
+regras de negócio
+
+validações
+
+mapeamentos
+
+Esses devem ser testados de forma real.
+
+10. Testes para Store (Zustand)
+
+Regras:
+
+Testar actions e transições de estado.
+
+Validar invariantes (ex.: flags não contraditórias).
+
+Não testar a lib Zustand, testar o comportamento do slice.
+
+Cenários recomendados:
+
+inicialização (bootstrap)
+
+atualização de dados
+
+reset/clear
+
+casos com pendências
+
+11. Testes para Bootstrap Pattern
+
+Bootstrap deve ser testado garantindo:
+
+carregamento correto de persistência e cache
+
+validação correta de regras
+
+hidratação correta do store
+
+flags de prontidão (isReady, isLoading) coerentes
+
+Observação:
+
+Bootstrap não deve depender de rede real.
+
+Simular dependências (Realm/cache) com stubs/mocks controlados.
+
+12. Testes de Componentes (UI)
+
+Padrão:
+
+Testar como o usuário interage (cliques, inputs, scroll, submit)
+
+Validar render baseado em estado e props
+
+Evitar:
+
+testar métodos privados
+
+testar estado interno sem necessidade
+
+Obrigatório testar:
+
+estados de loading
+
+estados de erro
+
+estados vazios
+
+estados com lista grande (sem travar e sem warning)
+
+13. E2E (Detox) – Padrão de Uso
+
+E2E deve cobrir apenas:
+
+caminhos críticos
+
+smoke test do app
+
+Exemplos de cenários E2E:
+
+login
+
+iniciar atividade
+
+encerrar atividade
+
+fluxo de assinatura
+
+bloqueio por pendência
+
+Regras:
+
+poucos testes, bem mantidos
+
+dados estáveis
+
+evitar dependência de ambiente frágil
+
+14. Coverage (Cobertura)
+
+Cobertura não é meta final, é ferramenta.
+
+Regras corporativas:
+
+regras de negócio: cobertura alta obrigatória
+
+UI simples: cobertura moderada
+
+E2E: poucos e críticos
+
+Nunca “testar por testar” só para aumentar porcentagem.
+
+15. Pipeline e Qualidade
+
+No CI, obrigatoriamente:
+
+lint
+
+typecheck (quando aplicável)
+
+unit/integration tests
+
+E2E pode ser:
+
+obrigatório em branches principais
+
+ou agendado (nightly) dependendo do custo
+
+16. Checklist de Testes (PR)
+
+Antes de abrir PR:
+
+
+
+
+17. Observação Final
+
+Testes existem para dar liberdade:
+
+refatorar sem medo
+
+evoluir sem regressão
+
+manter performance e estabilidade
+
+Se um teste está difícil de escrever, isso pode indicar:
+
+código acoplado
+
+responsabilidades misturadas
+
+necessidade de extrair regras para domínio
+
+Nesse caso, o problema pode estar no design, não no teste.

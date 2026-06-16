@@ -1,0 +1,152 @@
+Objetivo do Documento
+
+Este documento tem como objetivo padronizar a solicitação de alterações, melhorias ou novas funcionalidades em todos os projetos da empresa.
+
+Ele deve ser preenchido:
+
+por pessoas de negócio / produto ao solicitar uma alteração
+
+ou pelo próprio desenvolvedor ao formalizar uma demanda técnica
+
+A finalidade é garantir:
+
+clareza de escopo
+
+previsibilidade técnica
+
+redução de retrabalho
+
+alinhamento entre expectativa e implementação
+
+Nenhuma alteração relevante deve ser iniciada sem este documento preenchido.
+
+1. Informações Gerais
+
+Título da Solicitação
+(Descreva em uma frase curta e objetiva o que precisa ser feito)
+
+Tipo de Demanda
+( ) Correção de bug
+( ) Melhoria de funcionalidade existente
+( ) Nova funcionalidade
+( ) Ajuste visual/UI
+( ) Performance
+( ) Técnica / Arquitetural
+
+Projeto / Aplicação
+(Nome do projeto afetado)
+
+Solicitante
+(Nome de quem solicitou)
+
+Data da Solicitação
+
+2. Contexto da Alteração
+
+Qual é o problema ou necessidade?
+(Explique o cenário atual e o que motivou a solicitação. Evite soluções neste campo.)
+
+Onde o problema ocorre?
+(Tela, fluxo, funcionalidade, módulo ou serviço afetado)
+
+Com que frequência isso acontece?
+( ) Sempre
+( ) Frequentemente
+( ) Ocasionalmente
+( ) Caso específico
+
+3. Objetivo da Alteração
+
+O que deve acontecer após a alteração?
+(Descreva o comportamento esperado de forma clara e objetiva)
+
+Qual problema isso resolve?
+(Explique o ganho funcional, operacional ou técnico)
+
+4. Escopo da Alteração
+4.1 O que está INCLUSO
+
+(Descreva exatamente o que faz parte desta demanda)
+
+4.2 O que está FORA do escopo
+
+(Deixe explícito o que NÃO deve ser feito nesta demanda)
+
+5. Regras de Negócio
+
+Existem regras ou validações específicas?
+(Descreva todas as regras envolvidas, exceções e condições)
+
+Casos especiais / exceções conhecidas
+
+6. Comportamento Esperado (Critérios de Aceite)
+
+Descreva como saberemos que a alteração está correta.
+
+Exemplo:
+
+Dado X, quando o usuário fizer Y, então o sistema deve Z
+
+Liste todos os cenários relevantes.
+
+7. Impacto Técnico (preenchido pelo desenvolvedor)
+
+Camadas afetadas
+( ) UI
+( ) Store (Zustand)
+( ) Regras de negócio / domínio
+( ) Persistência (Realm / Cache)
+( ) Integração / Sync
+
+Existe risco de performance ou re-renderização?
+( ) Sim
+( ) Não
+
+Se sim, descreva:
+
+Será necessário alterar estado global ou bootstrap da tela?
+( ) Sim
+( ) Não
+
+8. Estratégia de Implementação (Dev)
+
+Como a alteração será implementada?
+(Descreva a abordagem técnica em alto nível)
+
+Onde a lógica deve viver?
+( ) UI
+( ) Store
+( ) Serviço / Domínio
+
+Justificativa:
+
+9. Performance e Qualidade
+
+Marque o que se aplica:
+
+
+
+
+10. Testes e Validação
+
+Tipo de teste necessário
+( ) Manual
+( ) Automatizado
+
+Cenários que devem ser testados
+
+11. Observações Importantes
+
+(Pontos de atenção, riscos conhecidos ou dependências)
+
+12. Aprovação
+
+Solicitante confirma que a descrição está correta:
+Nome / Data
+
+Responsável Técnico revisou a demanda:
+Nome / Data
+
+13. Histórico de Alterações
+
+Data – Descrição – Responsável

@@ -1,0 +1,158 @@
+# DEMANDA — MÓDULO DE AGENDAMENTO DE CLIENTES
+
+## 1. Contexto da Demanda
+
+O sistema atualmente não possui um fluxo estruturado para que clientes realizem agendamentos de forma autônoma.
+Hoje, os agendamentos são realizados manualmente ou por canais externos, gerando retrabalho, risco de conflitos de horário e baixa rastreabilidade.
+
+Esta demanda tem como objetivo permitir que o cliente realize seu próprio agendamento diretamente no sistema, respeitando regras de disponibilidade, evitando conflitos e garantindo integração com os dados já existentes.
+
+---
+
+## 2. Objetivo
+
+Permitir que clientes realizem agendamentos de forma simples, segura e organizada, garantindo:
+
+- Controle de horários disponíveis
+- Prevenção de conflitos
+- Registro confiável das informações
+- Base sólida para futuras evoluções (cancelamento, notificações, relatórios)
+
+---
+
+## 3. Escopo da Demanda
+
+### Incluído no escopo
+
+- Criação de módulo de agendamento para clientes
+- Visualização de horários disponíveis
+- Criação de um novo agendamento
+- Validação de conflitos de horário
+- Registro do agendamento no sistema
+- Associação do agendamento ao cliente e ao recurso agendado
+
+### Fora de escopo (neste momento)
+
+- Pagamento online
+- Notificações por e-mail ou WhatsApp
+- Integração com calendários externos (Google Calendar, Outlook)
+- Remarcação automática
+- Relatórios gerenciais avançados
+
+---
+
+## 4. Perfil de Usuário Envolvido
+
+- Cliente autenticado no sistema
+
+(Outros perfis não fazem parte desta demanda)
+
+---
+
+## 5. Requisitos Funcionais
+
+- O sistema deve permitir que o cliente visualize uma lista de datas disponíveis
+- O sistema deve permitir que o cliente visualize horários disponíveis para uma data selecionada
+- O sistema deve permitir que o cliente selecione um horário disponível
+- O sistema deve permitir que o cliente confirme a criação do agendamento
+- O sistema deve impedir a criação de dois agendamentos para o mesmo horário e recurso
+- O sistema deve registrar o agendamento com data, horário, cliente e recurso associado
+- O sistema deve exibir ao cliente a confirmação do agendamento realizado
+
+---
+
+## 6. Requisitos Não Funcionais
+
+- O sistema deve evitar conflitos de horário mesmo em acessos simultâneos
+- O tempo de resposta para consulta de horários disponíveis deve ser aceitável para uso interativo
+- Os dados de agendamento devem ser persistidos de forma confiável
+- O sistema deve garantir consistência dos dados em caso de falha durante o processo
+- O sistema deve respeitar as regras de autenticação já existentes
+
+---
+
+## 7. Regras de Negócio
+
+- Um horário só pode ser ocupado por um único agendamento para o mesmo recurso
+- Um cliente pode possuir mais de um agendamento, desde que não conflitem entre si
+- Agendamentos só podem ser realizados dentro do horário de funcionamento configurado
+- Agendamentos não podem ser realizados em datas passadas
+- O cliente só pode visualizar e criar agendamentos relacionados ao seu próprio perfil
+
+---
+
+## 8. Fluxos Principais
+
+### Fluxo principal (fluxo feliz)
+
+1. Cliente acessa o módulo de agendamento
+2. Cliente seleciona uma data
+3. Sistema exibe horários disponíveis para a data
+4. Cliente seleciona um horário
+5. Cliente confirma o agendamento
+6. Sistema valida disponibilidade
+7. Sistema registra o agendamento
+8. Sistema exibe confirmação ao cliente
+
+---
+
+## 9. Fluxos Alternativos e Exceções
+
+- Caso o horário seja ocupado durante o processo de confirmação, o sistema deve informar o cliente e solicitar nova seleção
+- Caso ocorra erro na persistência dos dados, o sistema deve informar falha no agendamento
+- Caso o cliente tente acessar datas ou horários inválidos, o sistema deve bloquear a ação
+
+---
+
+## 10. Impacto no Sistema Atual
+
+### Banco de Dados
+- Necessidade de tabela ou estrutura para armazenar agendamentos
+
+### Backend / API
+- Criação de endpoints para:
+  - Listar horários disponíveis
+  - Criar novo agendamento
+  - Validar conflitos
+
+### Frontend
+- Nova tela ou seção para agendamento
+- Componentes de seleção de data e horário
+- Tela ou modal de confirmação
+
+---
+
+## 11. Dependências
+
+- Sistema de autenticação já existente
+- Cadastro prévio do cliente
+- Cadastro do recurso a ser agendado
+- Configuração de horários de funcionamento
+
+---
+
+## 12. Riscos Identificados
+
+- Conflito de horários em acessos simultâneos
+- Ambiguidade nas regras de disponibilidade
+- Crescimento futuro do escopo sem planejamento adequado
+
+---
+
+## 13. Etapas Sugeridas de Desenvolvimento
+
+1. Levantamento e validação final das regras de negócio
+2. Modelagem da estrutura de dados de agendamento
+3. Implementação da validação de conflitos
+4. Criação dos endpoints de agendamento
+5. Implementação da interface de agendamento
+6. Validação de fluxos e exceções
+7. Testes funcionais e de regressão
+
+---
+
+## 14. Observações
+
+- Este módulo deve ser implementado de forma extensível para permitir futuras funcionalidades como cancelamento, reagendamento e notificações
+- Qualquer alteração de escopo deve ser registrada neste documento antes do desenvolvimento
+

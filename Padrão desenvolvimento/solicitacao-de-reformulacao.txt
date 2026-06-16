@@ -1,0 +1,211 @@
+Documento Padrão – Solicitação de Alteração / Desenvolvimento
+1. Informações Gerais
+
+Título da Solicitação
+Reformulação da arquitetura do sistema de agendamento para adequação aos padrões técnicos e de performance
+
+Tipo de Demanda
+( ) Correção de bug
+( ) Melhoria de funcionalidade existente
+( ) Nova funcionalidade
+( ) Ajuste visual/UI
+( ) Performance
+(x) Técnica / Arquitetural
+
+Projeto / Aplicação
+Sistema de Agendamento (Web e Mobile)
+
+Solicitante
+Enzo Martins
+
+Data da Solicitação
+//____
+
+2. Contexto da Alteração
+
+Qual é o problema ou necessidade?
+O sistema de agendamento foi desenvolvido de forma incremental ao longo do tempo e atualmente apresenta acoplamento excessivo entre UI, regras de negócio e estado. Há indícios de re-renderizações desnecessárias, uso excessivo de estados locais (useState), efeitos espalhados (useEffect), ausência de um ponto único de inicialização (bootstrap) e dificuldade para testes automatizados.
+
+Essa estrutura dificulta manutenção, evolução segura, refatorações e pode gerar problemas de performance, principalmente em fluxos mais complexos e dispositivos médios.
+
+Onde o problema ocorre?
+
+Fluxos principais de agendamento (criação, edição e cancelamento)
+
+Telas de listagem e detalhe de agendamentos
+
+Inicialização de dados (carregamento, validações e regras)
+
+Camadas de estado e regras de negócio
+
+Com que frequência isso acontece?
+(x) Sempre
+( ) Frequentemente
+( ) Ocasionalmente
+( ) Caso específico
+
+3. Objetivo da Alteração
+
+O que deve acontecer após a alteração?
+O sistema de agendamento deve possuir uma arquitetura clara, previsível e alinhada aos padrões corporativos definidos, com separação explícita entre UI, estado, regras de negócio e infraestrutura, garantindo melhor desempenho, facilidade de manutenção e segurança para evolução futura.
+
+Qual problema isso resolve?
+
+Reduz re-renderizações desnecessárias
+
+Melhora performance geral do sistema
+
+Facilita escrita e manutenção de testes
+
+Aumenta previsibilidade do comportamento
+
+Reduz risco de regressões em futuras alterações
+
+4. Escopo da Alteração
+4.1 O que está INCLUSO
+
+Refatoração da arquitetura do sistema de agendamento
+
+Migração de estados complexos para Store (Zustand)
+
+Implementação do Bootstrap Pattern nas telas principais
+
+Extração de regras de negócio para serviços/domínio
+
+Organização correta de efeitos (useEffect, useMemo, useCallback)
+
+Adequação da UI ao design system e biblioteca oficial
+
+Ajustes necessários para garantir melhor performance
+
+Criação/adequação de testes unitários e de integração para fluxos críticos
+
+4.2 O que está FORA do escopo
+
+Criação de novas funcionalidades de agendamento
+
+Alterações visuais não relacionadas à arquitetura
+
+Mudanças de regra de negócio não documentadas nesta demanda
+
+Integrações externas novas
+
+5. Regras de Negócio
+
+Existem regras ou validações específicas?
+As regras de negócio existentes do sistema de agendamento devem ser mantidas, porém reorganizadas para viver exclusivamente na camada de domínio/serviços.
+
+Exemplos:
+
+Validação de disponibilidade de horários
+
+Regras de conflito de agendamento
+
+Regras de edição/cancelamento
+
+Validações condicionais por tipo de usuário
+
+Casos especiais / exceções conhecidas
+
+Agendamentos já existentes não devem ser invalidados
+
+Fluxos críticos não podem ser quebrados durante a refatoração
+
+6. Comportamento Esperado (Critérios de Aceite)
+
+Dado um usuário acessando o sistema, quando a tela de agendamento for carregada, o sistema deve inicializar corretamente via bootstrap, sem múltiplos efeitos concorrentes.
+
+Dado um agendamento existente, quando o usuário editar ou cancelar, o comportamento deve permanecer funcional e consistente.
+
+Não devem existir warnings de performance ou virtualização.
+
+O sistema deve permitir evolução futura sem necessidade de reescrita estrutural.
+
+7. Impacto Técnico (Dev)
+
+Camadas afetadas
+(x) UI
+(x) Store (Zustand)
+(x) Regras de negócio / domínio
+(x) Persistência (Cache / quando aplicável)
+( ) Integração / Sync
+
+Existe risco de performance ou re-renderização?
+(x) Sim
+( ) Não
+
+Descrição:
+A demanda envolve refatoração profunda justamente para eliminar riscos atuais de performance e re-renderizações excessivas.
+
+Será necessário alterar estado global ou bootstrap da tela?
+(x) Sim
+( ) Não
+
+8. Estratégia de Implementação (Dev)
+
+Como a alteração será implementada?
+A refatoração será realizada por etapas, mantendo comportamento funcional enquanto a arquitetura é reorganizada. Estados serão migrados para a store, regras extraídas para domínio e telas reorganizadas com bootstrap único de inicialização.
+
+Onde a lógica deve viver?
+( ) UI
+(x) Store
+(x) Serviço / Domínio
+
+Justificativa:
+Separação clara de responsabilidades, maior testabilidade, previsibilidade e alinhamento com padrões corporativos.
+
+9. Performance e Qualidade
+
+Marque o que se aplica:
+
+ Não adiciona re-renderizações desnecessárias
+
+ Não cria estado duplicado
+
+ Respeita o Bootstrap Pattern
+
+ Usa useMemo/useCallback quando necessário
+
+ Mantém listas virtualizadas corretamente
+
+ Segue o design system e biblioteca UI
+
+10. Testes e Validação
+
+Tipo de teste necessário
+( ) Manual
+(x) Automatizado
+
+Cenários que devem ser testados
+
+Inicialização do sistema de agendamento (bootstrap)
+
+Criação de agendamento
+
+Edição de agendamento
+
+Cancelamento de agendamento
+
+Validações de regras de negócio
+
+Estados de erro e vazio
+
+11. Observações Importantes
+
+Refatoração deve ser incremental e segura
+
+Comentários explicativos são obrigatórios em todos os pontos críticos
+
+Alterações devem seguir integralmente o Manual de Engenharia e Padrão de Testes
+
+12. Aprovação
+
+Solicitante confirma que a descrição está correta:
+Enzo Martins – //____
+
+Responsável Técnico revisou a demanda:
+Enzo Martins – //____
+
+13. Histórico de Alterações
+
+//____ – Criação da solicitação – Enzo Martins
