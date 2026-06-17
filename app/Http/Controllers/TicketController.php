@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexTicketRequest;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Services\TicketCreationService;
+use App\Services\TicketQueryService;
 use App\Services\TicketUpdateService;
 use DomainException;
 use Illuminate\Http\RedirectResponse;
@@ -15,6 +17,17 @@ use Illuminate\View\View;
 
 class TicketController extends Controller
 {
+    public function index(
+        IndexTicketRequest $request,
+        TicketQueryService $ticketQueryService,
+    ): View {
+        return view('tickets.index', [
+            'tickets' => $ticketQueryService->paginate($request->validated()),
+            'responsibleUsers' => $this->responsibleUsers(),
+            'filters' => $request->validated(),
+        ]);
+    }
+
     public function create(): View
     {
         return view('tickets.create', [
@@ -42,6 +55,15 @@ class TicketController extends Controller
         return redirect()
             ->route('dashboard')
             ->with('success', 'Chamado aberto com sucesso.');
+    }
+
+    public function show(
+        Ticket $ticket,
+        TicketQueryService $ticketQueryService,
+    ): View {
+        return view('tickets.show', [
+            'ticket' => $ticketQueryService->show($ticket),
+        ]);
     }
 
     public function edit(Ticket $ticket): View

@@ -29,6 +29,12 @@
                             Dashboard
                         </a>
                         <a
+                            href="{{ route('tickets.index') }}"
+                            class="block rounded-md px-3 py-2 text-sm font-medium transition {{ request()->routeIs('tickets.index') || request()->routeIs('tickets.show') || request()->routeIs('tickets.edit') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}"
+                        >
+                            Chamados
+                        </a>
+                        <a
                             href="{{ route('tickets.create') }}"
                             class="block rounded-md px-3 py-2 text-sm font-medium transition {{ request()->routeIs('tickets.create') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}"
                         >

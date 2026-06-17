@@ -22,6 +22,12 @@
 
             <div>
                 <a
+                    href="{{ route('tickets.index') }}"
+                    class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 transition hover:bg-gray-50"
+                >
+                    Consultar chamados
+                </a>
+                <a
                     href="{{ route('tickets.create') }}"
                     class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700"
                 >
