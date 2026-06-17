@@ -1,23 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            Abrir chamado
+            Editar chamado
         </h2>
     </x-slot>
 
     <div class="space-y-6">
         <x-card class="space-y-6">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900">Novo chamado</h3>
+                <h3 class="text-lg font-semibold text-gray-900">Atualizacao do chamado</h3>
                 <p class="mt-1 text-sm text-gray-600">
-                    Preencha os dados abaixo para registrar um novo chamado interno.
+                    Altere os dados necessarios, incluindo status e atribuicao do chamado.
                 </p>
             </div>
 
             @include('tickets.form', [
-                'action' => route('tickets.store'),
+                'ticket' => $ticket,
+                'action' => route('tickets.update', $ticket),
+                'method' => 'PUT',
                 'responsibleUsers' => $responsibleUsers,
-                'submitLabel' => 'Salvar chamado',
+                'submitLabel' => 'Atualizar chamado',
+                'showStatus' => true,
             ])
         </x-card>
     </div>
