@@ -5,9 +5,29 @@
         </h2>
     </x-slot>
 
-    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">
-            Autenticacao inicial configurada com sucesso. As proximas fases irao implementar o dominio de chamados, filtros, dashboard gerencial e regras de distribuicao conforme a documentacao do projeto.
-        </p>
+    <div class="space-y-6">
+        @if (session('success'))
+            <x-alert>
+                {{ session('success') }}
+            </x-alert>
+        @endif
+
+        <x-card class="space-y-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Cadastro de chamados</h3>
+                <p class="mt-1 text-sm text-gray-600">
+                    O fluxo de abertura de chamados ja esta disponivel para usuarios autenticados.
+                </p>
+            </div>
+
+            <div>
+                <a
+                    href="{{ route('tickets.create') }}"
+                    class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700"
+                >
+                    Abrir novo chamado
+                </a>
+            </div>
+        </x-card>
     </div>
 </x-app-layout>
