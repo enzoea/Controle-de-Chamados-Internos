@@ -4,14 +4,14 @@
 
 @php
     $classes = match ((string) $value) {
-        'ABERTO' => 'bg-blue-100 text-blue-700',
-        'EM_ANDAMENTO' => 'bg-amber-100 text-amber-700',
-        'RESOLVIDO' => 'bg-emerald-100 text-emerald-700',
-        'FECHADO' => 'bg-gray-200 text-gray-700',
-        default => 'bg-gray-100 text-gray-700',
+        'ABERTO' => 'font-semibold text-[#b51f2f]',
+        'EM_ANDAMENTO' => 'font-semibold text-[#9a4c3f]',
+        'RESOLVIDO' => 'font-semibold text-[#35624b]',
+        'FECHADO' => 'font-semibold text-[#6c5a5f]',
+        default => 'font-semibold text-[#6c5a5f]',
     };
 @endphp
 
-<span {{ $attributes->merge(['class' => "inline-flex rounded-full px-3 py-1 text-xs font-semibold {$classes}"]) }}>
+<span {{ $attributes->merge(['class' => $classes]) }}>
     {{ $value }}
 </span>

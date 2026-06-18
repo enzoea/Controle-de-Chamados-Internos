@@ -125,7 +125,7 @@
     <div class="flex items-center justify-end gap-3">
         <a
             href="{{ route('dashboard') }}"
-            class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 transition hover:bg-gray-50"
+            class="btn-secondary"
         >
             Cancelar
         </a>

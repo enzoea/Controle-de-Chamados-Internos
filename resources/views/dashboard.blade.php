@@ -1,9 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard
-        </h2>
-    </x-slot>
 
     <div class="space-y-6">
         @if (session('success'))
@@ -12,24 +7,32 @@
             </x-alert>
         @endif
 
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+            <x-stat-card label="Total de chamados" :value="$stats['total']" icon="chart" />
+            <x-stat-card label="Chamados abertos" :value="$stats['abertos']" icon="open" />
+            <x-stat-card label="Chamados Em andamento" :value="$stats['em_andamento']" icon="progress" />
+            <x-stat-card label="Chamados Resolvidos" :value="$stats['resolvidos']" icon="resolved" />
+            <x-stat-card label="Chamados Fechados" :value="$stats['fechados']" icon="closed" />
+        </div>
+
         <x-card class="space-y-4">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900">Cadastro de chamados</h3>
-                <p class="mt-1 text-sm text-gray-600">
-                    O fluxo de abertura de chamados ja esta disponivel para usuarios autenticados.
+                <h3 class="section-title text-lg font-semibold">Acoes rapidas</h3>
+                <p class="muted-text mt-1 text-sm">
+                    Utilize os atalhos abaixo para abrir ou consultar chamados no sistema.
                 </p>
             </div>
 
-            <div>
+            <div class="flex flex-wrap gap-3">
                 <a
                     href="{{ route('tickets.index') }}"
-                    class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 transition hover:bg-gray-50"
+                    class="btn-secondary"
                 >
                     Consultar chamados
                 </a>
                 <a
                     href="{{ route('tickets.create') }}"
-                    class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700"
+                    class="btn-primary"
                 >
                     Abrir novo chamado
                 </a>

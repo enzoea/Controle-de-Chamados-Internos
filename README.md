@@ -1,59 +1,295 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Controle de Chamados Internos
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicacao web para registro, distribuicao e acompanhamento de chamados internos, desenvolvida com Laravel.
 
-## About Laravel
+## Inicio Rapido
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Antes de iniciar, voce precisa ter instalado na maquina:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- `PHP 8.2+`
+- `Composer`
+- `Node.js`
+- `NPM`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Para rodar o sistema pela primeira vez:
 
-## Learning Laravel
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php artisan migrate --seed
+npm run build
+php artisan serve --host=127.0.0.1 --port=8082
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+No Windows PowerShell:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```powershell
+composer install
+npm install
+Copy-Item .env.example .env
+php artisan key:generate
+if (-not (Test-Path database/database.sqlite)) { New-Item database/database.sqlite -ItemType File }
+php artisan migrate --seed
+npm run build
+php artisan serve --host=127.0.0.1 --port=8082
+```
 
-## Laravel Sponsors
+Apos isso, acesse:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Aplicacao: [http://127.0.0.1:8082/](http://127.0.0.1:8082/)
+- Login: [http://127.0.0.1:8082/login](http://127.0.0.1:8082/login)
 
-### Premium Partners
+## Stack
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Backend: `PHP`, `Laravel 12`, `Eloquent ORM`, `Laravel Breeze`
+- Frontend: `Blade`, `TailwindCSS`, `Alpine.js`
+- Banco em desenvolvimento: `SQLite`
+- Testes: `PHPUnit`
+- Build frontend: `Vite`
 
-## Contributing
+## Documentacao Tecnica
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Indice da documentacao: `docs/README.md`
+- Arquitetura: `docs/arquitetura.md`
+- Decisoes e trade-offs: `docs/decisoes-e-tradeoffs.md`
+- Guia de manutencao: `docs/guia-de-manutencao.md`
+- Qualidade e testes: `docs/qualidade-e-testes.md`
 
-## Code of Conduct
+## Trade-offs Registrados
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Blade + Alpine em vez de SPA
 
-## Security Vulnerabilities
+Escolha:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- usar renderizacao server-side com `Blade`
+- usar `Alpine.js` apenas para interacoes leves
 
-## License
+Motivos:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- reduz atrito entre frontend e backend
+- mantem a equipe trabalhando em uma base unica
+- acelera entregas de CRUD, dashboards e telas administrativas
+- simplifica manutencao para equipe pequena
+
+Trade-off:
+
+- menos fluidez para interacoes muito ricas comparado a uma SPA completa
+
+### SQLite em desenvolvimento
+
+Escolha:
+
+- usar `SQLite` no ambiente local
+
+Motivos:
+
+- onboarding mais rapido
+- execucao simples sem dependencias externas
+- menor custo de setup para avaliacao e manutencao
+
+Trade-off:
+
+- algumas diferencas podem existir entre ambiente local e banco de producao
+
+### Permissao simples por enquanto
+
+Escolha:
+
+- manter o acesso baseado apenas em autenticacao
+
+Motivos:
+
+- o escopo atual nao detalha matriz formal de perfis e papeis
+- evita criar regra de autorizacao nao confirmada
+- reduz complexidade inicial
+
+Trade-off:
+
+- o sistema ainda nao possui segregacao fina de acesso por perfil
+
+## Requisitos
+
+- `PHP 8.2+`
+- `Composer`
+- `Node.js` e `NPM`
+
+## Instalacao
+
+1. Instale as dependencias PHP:
+
+```bash
+composer install
+```
+
+2. Instale as dependencias frontend:
+
+```bash
+npm install
+```
+
+3. Crie o arquivo de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+No Windows PowerShell, use:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+4. Gere a chave da aplicacao:
+
+```bash
+php artisan key:generate
+```
+
+5. Garanta que o arquivo do banco SQLite exista:
+
+```bash
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+```
+
+No Windows PowerShell, use:
+
+```powershell
+if (-not (Test-Path database/database.sqlite)) { New-Item database/database.sqlite -ItemType File }
+```
+
+6. Execute migrations e seeders:
+
+```bash
+php artisan migrate --seed
+```
+
+## Execucao Local
+
+O frontend precisa estar compilado para a interface funcionar corretamente. Use uma das opcoes abaixo:
+
+- `npm run dev`: para desenvolvimento local com recompilacao automatica
+- `npm run build`: para gerar os assets uma vez e depois subir a aplicacao
+
+Se esta rodando o projeto pela primeira vez e nao vai deixar o Vite aberto, execute antes:
+
+```bash
+npm run build
+```
+
+Depois, suba a aplicacao na porta padronizada do projeto:
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8082
+```
+
+Se quiser desenvolvimento com assets em tempo real, rode em outro terminal:
+
+```bash
+npm run dev
+```
+
+Para build de producao dos assets:
+
+```bash
+npm run build
+```
+
+## Acesso
+
+- Aplicacao: [http://127.0.0.1:8082/](http://127.0.0.1:8082/)
+- Login: [http://127.0.0.1:8082/login](http://127.0.0.1:8082/login)
+
+## Credenciais Iniciais
+
+Administrador:
+
+- E-mail: `admin@example.com`
+- Senha: `password`
+
+Usuarios responsaveis:
+
+- `enzoea256@gmail.com` / `123456`
+- `leonardo.pai@example.com` / `123456`
+- `bianca.scoralick@example.com` / `123456`
+
+## Fluxos Implementados
+
+- Login e logout
+- Dashboard com indicadores de total, abertos, em andamento, resolvidos e fechados
+- Cadastro de chamado
+- Edicao de chamado
+- Alteracao de status
+- Listagem de chamados
+- Filtros por status, prioridade e responsavel
+- Visualizacao detalhada
+- Distribuicao automatica por menor carga com desempate por menor ID
+
+## Banco De Dados
+
+- Desenvolvimento: `SQLite`
+- Arquivo local: `database/database.sqlite`
+- Nao existe um servidor de banco separado para subir localmente nesse setup
+- O banco passa a funcionar assim que o arquivo `database/database.sqlite` existe e as migrations sao executadas
+- Ou seja: com o fluxo documentado no README, o banco ja fica pronto para uso junto com a aplicacao
+
+Se precisar reiniciar a base local do zero:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+## Testes
+
+Executar toda a suite:
+
+```bash
+php artisan test
+```
+
+Executar apenas um grupo especifico:
+
+```bash
+php artisan test --filter=TicketAssignmentServiceTest
+php artisan test --filter=CreateTicketTest
+php artisan test --filter=UpdateTicketTest
+php artisan test --filter=ListTicketsTest
+php artisan test --filter=ShowTicketTest
+php artisan test --filter=ViewDashboardTest
+```
+
+## Estrutura Principal
+
+```text
+app
+├── Enums
+├── Http
+│   ├── Controllers
+│   └── Requests
+├── Models
+└── Services
+
+database
+├── factories
+├── migrations
+└── seeders
+
+resources
+└── views
+    ├── auth
+    ├── components
+    ├── layouts
+    └── tickets
+
+tests
+├── Feature
+└── Unit
+```
+
+## Observacoes
+
+- O projeto utiliza `SQLite` para facilitar avaliacao local sem configuracao adicional.
+- A aplicacao foi organizada no fluxo `Controller -> Form Request -> Service -> Model`.
+- As regras de distribuicao automatica possuem cobertura de testes.

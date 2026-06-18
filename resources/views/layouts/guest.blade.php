@@ -14,17 +14,32 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+    <body class="font-sans antialiased">
+        <main class="auth-shell">
+            <section class="auth-panel-copy">
+                <a href="{{ route('home') }}" class="inline-flex w-fit">
+                    <x-application-logo class="h-auto w-auto text-[var(--color-brand)]" />
                 </a>
-            </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
-        </div>
+                <div class="max-w-2xl space-y-6">
+                    <p class="eyebrow-text">Atendimento interno com mais clareza</p>
+                    <h1 class="page-title text-4xl font-semibold leading-[1.15] lg:text-5xl">
+                        <span class="block">Organize, acompanhe e</span>
+                        <span class="text-brand-strong block font-semibold leading-[1.15]">
+                            resolva chamados com mais agilidade.
+                        </span>
+                    </h1>
+                    <p class="muted-text max-w-xl text-base leading-8">
+                        O sistema centraliza a abertura, a atribuicao e o acompanhamento dos chamados internos, oferecendo visibilidade para o time e um fluxo simples para tratar demandas do inicio ao encerramento.
+                    </p>
+                </div>
+            </section>
+
+            <section class="auth-panel-login">
+                <div class="surface-card auth-card overflow-hidden px-6 py-6 sm:px-8 sm:py-8">
+                    {{ $slot }}
+                </div>
+            </section>
+        </main>
     </body>
 </html>

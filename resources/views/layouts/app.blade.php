@@ -14,50 +14,52 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-100 text-gray-900">
-        <div class="min-h-screen">
+    <body class="font-sans antialiased">
+        <div class="flex min-h-screen flex-col">
             @include('layouts.navigation')
 
-            <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
-                <aside class="w-full shrink-0 rounded-lg border border-gray-200 bg-white p-4 shadow-sm lg:w-64">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Navegacao</p>
-                    <nav class="mt-4 space-y-2">
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="block rounded-md px-3 py-2 text-sm font-medium transition {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}"
-                        >
-                            Dashboard
-                        </a>
-                        <a
-                            href="{{ route('tickets.index') }}"
-                            class="block rounded-md px-3 py-2 text-sm font-medium transition {{ request()->routeIs('tickets.index') || request()->routeIs('tickets.show') || request()->routeIs('tickets.edit') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}"
-                        >
-                            Chamados
-                        </a>
-                        <a
-                            href="{{ route('tickets.create') }}"
-                            class="block rounded-md px-3 py-2 text-sm font-medium transition {{ request()->routeIs('tickets.create') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}"
-                        >
-                            Abrir chamado
-                        </a>
-                    </nav>
-                </aside>
+            <div class="flex-1">
+                <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
+                    <aside class="surface-card w-full shrink-0 p-5 lg:w-64">
+                        <p class="eyebrow-text">Navegacao</p>
+                        <nav class="mt-4 flex flex-col gap-2">
+                            <a
+                                href="{{ route('dashboard') }}"
+                                class="{{ request()->routeIs('dashboard') ? 'nav-link-base nav-link-active' : 'nav-link-base nav-link-inactive' }}"
+                            >
+                                Dashboard
+                            </a>
+                            <a
+                                href="{{ route('tickets.index') }}"
+                                class="{{ request()->routeIs('tickets.index') || request()->routeIs('tickets.show') || request()->routeIs('tickets.edit') ? 'nav-link-base nav-link-active' : 'nav-link-base nav-link-inactive' }}"
+                            >
+                                Chamados
+                            </a>
+                            <a
+                                href="{{ route('tickets.create') }}"
+                                class="{{ request()->routeIs('tickets.create') ? 'nav-link-base nav-link-active' : 'nav-link-base nav-link-inactive' }}"
+                            >
+                                Abrir chamado
+                            </a>
+                        </nav>
+                    </aside>
 
-                <div class="flex-1 space-y-6">
-                    @isset($header)
-                        <header class="rounded-lg border border-gray-200 bg-white px-6 py-4 shadow-sm">
-                            {{ $header }}
-                        </header>
-                    @endisset
+                    <div class="flex-1 space-y-6">
+                        @isset($header)
+                            <header class="surface-card px-6 py-5">
+                                {{ $header }}
+                            </header>
+                        @endisset
 
-                    <main>
-                        {{ $slot }}
-                    </main>
+                        <main>
+                            {{ $slot }}
+                        </main>
+                    </div>
                 </div>
             </div>
 
-            <footer class="border-t border-gray-200 bg-white">
-                <div class="mx-auto max-w-7xl px-4 py-4 text-sm text-gray-500 sm:px-6 lg:px-8">
+            <footer class="border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+                <div class="mx-auto max-w-7xl px-4 py-4 text-sm text-[var(--color-text-muted)] sm:px-6 lg:px-8">
                     Sistema de Controle de Chamados Internos
                 </div>
             </footer>
